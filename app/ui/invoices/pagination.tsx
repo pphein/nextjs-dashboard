@@ -3,10 +3,10 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { generatePagination } from '@/app/lib/utils';
+import { generatePagination,generatePaginationWithRow } from '@/app/lib/utils';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function Pagination({ totalPages }: { totalPages: number }) {
+export default function Pagination({ totalPages, rowsNum }: { totalPages: number, rowsNum: number }) {
   // NOTE: comment in this code when you get to this point in the course
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -18,8 +18,8 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
     return `${pathname}?${params.toString()}`;
   };
 
-  const allPages = generatePagination(currentPage, totalPages);
-
+  // const allPages = generatePagination(currentPage, totalPages);
+  const allPages = generatePaginationWithRow(currentPage, totalPages, rowsNum);
   return (
     <>
       {/* NOTE: comment in this code when you get to this point in the course */}

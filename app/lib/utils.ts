@@ -67,3 +67,46 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export const generatePaginationWithRow = (
+  currentPage: number,
+  totalPages: number,
+  rowsPerPage: number
+) => {
+  // Calculate the total number of pages based on the rowsPerPage
+  const totalPaginationPages = Math.ceil(totalPages / rowsPerPage);
+
+  // If the total number of pages is 7 or less,
+  // display all pages without any ellipsis.
+  if (totalPaginationPages <= 7) {
+    return Array.from({ length: totalPaginationPages }, (_, i) => i + 1);
+  }
+
+  // Calculate the currentPaginationPage based on the rowsPerPage
+  const currentPaginationPage = Math.ceil(currentPage / rowsPerPage);
+
+  // If the current pagination page is among the first 3 pages,
+  // show the first 3, an ellipsis, and the last 2 pages.
+  if (currentPaginationPage <= 3) {
+    return Array.from({ length: 5 }, (_, i) => i + 1);
+  }
+
+  // If the current pagination page is among the last 3 pages,
+  // show the first 2, an ellipsis, and the last 3 pages.
+  if (currentPaginationPage >= totalPaginationPages - 2) {
+    return Array.from({ length: 5 }, (_, i) => totalPaginationPages - 4 + i);
+  }
+
+  // If the current pagination page is somewhere in the middle,
+  // show the first page, an ellipsis, the current page and its neighbors,
+  // another ellipsis, and the last page.
+  return [
+    1,
+    '...',
+    currentPaginationPage - 1,
+    currentPaginationPage,
+    currentPaginationPage + 1,
+    '...',
+    totalPaginationPages,
+  ];
+};

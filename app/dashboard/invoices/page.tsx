@@ -8,16 +8,19 @@ import { Suspense } from 'react';
 import { fetchInvoicesPages } from '@/app/lib/data';
  
 export default async function Page({
-  searchParams,
+  searchParams
 }: {
   searchParams?: {
     query?: string;
     page?: string;
-  };
+    perPage?: number;
+  }
 }) {
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchInvoicesPages(query);
+  const rowsNum = Number(searchParams?.perPage) || 10;
+
+  const totalPages = await fetchInvoicesPages(query, rowsNum);
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
@@ -28,10 +31,10 @@ export default async function Page({
         <CreateInvoice />
       </div>
        <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
-        <Table query={query} currentPage={currentPage} />
+        <Table query={query} currentPage={currentPage} rowsNum={rowsNum} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
+        <Pagination totalPages={totalPages} rowsNum={rowsNum} />
       </div>
     </div>
   );

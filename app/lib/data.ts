@@ -91,10 +91,11 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 6;
+// const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
+  ITEMS_PER_PAGE: number,
 ) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -128,7 +129,7 @@ export async function fetchFilteredInvoices(
   }
 }
 
-export async function fetchInvoicesPages(query: string) {
+export async function fetchInvoicesPages(query: string, ITEMS_PER_PAGE: number) {
   noStore();
   try {
     const count = await sql`SELECT COUNT(*)

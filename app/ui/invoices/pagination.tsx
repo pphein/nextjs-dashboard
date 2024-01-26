@@ -55,7 +55,7 @@ export default function Pagination({ totalPages, rowsNum }: { totalPages: number
         <PaginationArrow
           direction="right"
           href={createPageURL(currentPage + 1)}
-          isDisabled={currentPage >= totalPages}
+          isDisabled={currentPage >= Math.ceil(totalPages/rowsNum)}
         />
       </div>
     </>

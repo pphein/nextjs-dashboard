@@ -129,8 +129,9 @@ export async function fetchFilteredInvoices(
   }
 }
 
-export async function fetchInvoicesPages(query: string, ITEMS_PER_PAGE: number) {
+export async function fetchInvoicesPages(query: string) {
   noStore();
+
   try {
     const count = await sql`SELECT COUNT(*)
     FROM invoices
@@ -143,7 +144,7 @@ export async function fetchInvoicesPages(query: string, ITEMS_PER_PAGE: number) 
       invoices.status ILIKE ${`%${query}%`}
   `;
 
-    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(Number(count.rows[0].count));
     return totalPages;
   } catch (error) {
     console.error('Database Error:', error);

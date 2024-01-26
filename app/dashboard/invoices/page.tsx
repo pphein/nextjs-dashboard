@@ -20,7 +20,7 @@ export default async function Page({
   const currentPage = Number(searchParams?.page) || 1;
   const rowsNum = Number(searchParams?.perPage) || 10;
 
-  const totalPages = await fetchInvoicesPages(query, rowsNum);
+  const totalPages = await fetchInvoicesPages(query);
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">

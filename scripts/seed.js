@@ -4,6 +4,7 @@ const {
   customers,
   revenue,
   users,
+  blogs,
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
@@ -42,6 +43,43 @@ async function seedUsers(client) {
     };
   } catch (error) {
     console.error('Error seeding users:', error);
+    throw error;
+  }
+}
+
+async function seedBlogs(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+    // Create the "users" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS blogs (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        body TEXT NOT NULL UNIQUE
+      );
+    `;
+
+    console.log(`Created "blogs" table`);
+
+    // Insert data into the "blogs" table
+    const insertedBlogs = await Promise.all(
+      blogs.map(async (blog) => {
+        return client.sql`
+        INSERT INTO blogs (id, title, body)
+        VALUES (${blog.id}, ${blog.title}, ${blog.body})
+        ON CONFLICT (id) DO NOTHING;
+      `;
+      }),
+    );
+
+    console.log(`Seeded ${insertedBlogs.length} blogs`);
+
+    return {
+      createTable,
+      blogs: insertedBlogs,
+    };
+  } catch (error) {
+    console.error('Error seeding blogs:', error);
     throw error;
   }
 }
@@ -167,6 +205,7 @@ async function main() {
   await seedCustomers(client);
   await seedInvoices(client);
   await seedRevenue(client);
+  await seedBlogs(client);
 
   await client.end();
 }

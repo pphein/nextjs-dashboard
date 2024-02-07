@@ -180,7 +180,16 @@ const revenue = [
   { month: 'Dec', revenue: 4800 },
 ];
 
+const blogs = [
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
+    title: 'Hello world!',
+    body: 'hello, this is body'
+  }
+]
+
 module.exports = {
+  blogs,
   users,
   customers,
   invoices,

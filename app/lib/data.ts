@@ -7,9 +7,30 @@ import {
   LatestInvoiceRaw,
   User,
   Revenue,
+  Blog,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+
+export async function fetchBlogs() {
+  noStore();
+  try {
+    const data = await sql<Blog>`
+      SELECT
+        id,
+        title,
+        body
+      FROM blogs
+      ORDER BY title ASC
+    `;
+
+    const blogs = data.rows;
+    return blogs;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all blogs.');
+  }
+}
 
 export async function fetchRevenue() {
   // Add noStore() here prevent the response from being cached.
@@ -237,5 +258,15 @@ export async function getUser(email: string) {
   } catch (error) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
+  }
+}
+
+export async function getBlogById(id: string) {
+  try {
+    const blog = await sql`SELECT * FROM blogs WHERE id=${id}`;
+    return blog.rows[0] as Blog;
+  } catch (error) {
+    console.error('Failed to fetch blog:', error);
+    throw new Error('Failed to fetch blog.');
   }
 }
